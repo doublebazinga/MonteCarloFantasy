@@ -46,6 +46,7 @@ class Deck:
 
     show: show the current deck
 
+    draw: draw a card from the current deck
     """
     def __init__(self, shuffle:bool=True):
         """
@@ -97,3 +98,81 @@ class Deck:
         return the last element in deck_list, a Card object
         """
         return self.deck_list.pop()
+
+##### Class Deck
+class Shoe:
+    """
+    Represents the shoe, which is a gaming device, mainly used
+    in casinos, to hold multiple decks of playing cards.
+
+    ----
+    attributes:
+    num_deck: the number of decks of playing cards, default with 6,
+    recommend values: {2, 4, 6, 8}
+
+    shoe_list: list of Card objects
+
+    ----
+    methods:
+    shuffle: shuffle the current shoe
+
+    draw: draw a card from the current shoe
+    """
+    def __init__(self, num_decks:int=6):
+        """
+        ----
+        parameters:
+        num_decks: the number of decks of playing cards, default with 6,
+        recommend values: {2, 4, 6, 8}
+
+        """
+        self.num_decks = num_decks
+        self.__shuffle_point = None  # index of shoe list
+        self.shoe_list = self.__build()
+        self.shuffle()  # shuffle the initial shoe and set penetration
+
+    def __build(self) -> list:
+        """
+        Generate a shoe of playing Card objects
+
+        ----
+        return:
+        shoe_list: list of Card objects
+        """
+        shoe_list = []
+        for i in range(self.num_decks):
+            shoe_list += Deck().deck_list
+        return shoe_list
+
+    def shuffle(self):
+        """
+        Shuffle the deck, using random.shuffle() method
+        """
+        random.shuffle(self.shoe_list)
+        self.__set_penetration()
+
+    def draw(self):
+        """
+        Draw a card from the current shoe, i.e. the last element
+        in the shoe_list
+
+        ----
+        return the last element in shoe_list, a Card object
+        """
+        return self.shoe_list.pop()
+
+    def __set_penetration(self):
+        """
+        Set penetration every time the shoe is shuffled. This private
+        method is only used in self.shuffle()
+        """
+        shuffle_point_pct = random.uniform(0.25, 0.5)  # TODO
+        self.__shuffle_point = round(shuffle_point_pct * 52 * self.num_decks)
+
+    def __check_penetration(self):
+        """
+        Check if the shoe reaches the shuffle point. Check every time a
+        card is drawn
+        """
+        if len(self.shoe_list) <= self.__shuffle_point:
+            self.shuffle()
