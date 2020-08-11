@@ -1,0 +1,8 @@
+# exclude environment file
+env
+
+# exclude test file
+test
+
+# exclude Jetbrain settings
+.idea
