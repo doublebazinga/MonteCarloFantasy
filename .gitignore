@@ -6,3 +6,6 @@ test
 
 # exclude Jetbrain settings
 .idea
+
+# exclude cache files
+__pycache__/
